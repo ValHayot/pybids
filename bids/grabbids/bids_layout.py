@@ -2,23 +2,28 @@ import os
 import re
 import json
 
+from hdfs import Config 
+
 from os.path import dirname
 from os.path import abspath
 from os.path import join as pathjoin
 from os.path import basename
 
-from grabbit import Layout
+from core import Layout
+
+
 
 __all__ = ['BIDSLayout']
 
 
 class BIDSLayout(Layout):
-    def __init__(self, path, config=None, **kwargs):
+    def __init__(self, path, config=None, in_hdfs=False, **kwargs):
         if config is None:
             root = dirname(abspath(__file__))
             config = pathjoin(root, 'config', 'bids.json')
+            print(path)
         super(BIDSLayout, self).__init__(path, config,
-                                         dynamic_getters=True, **kwargs)
+                                         dynamic_getters=True, in_hdfs=in_hdfs, **kwargs)
 
     def _validate_file(self, f):
         # Return False to exclude a file from indexing. This should call
